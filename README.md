@@ -1,0 +1,1 @@
+# ninja-salary2
