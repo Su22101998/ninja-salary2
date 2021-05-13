@@ -1,9 +1,10 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { Text, View, StyleSheet, TextInput, TouchableOpacity, Alert,Button} from 'react-native';
 import { useDispatch,useSelector } from 'react-redux';
 import {reduceBalance} from '../store/actions/salary';
-import {addBalance} from '../store/actions/salary';
+import {addBalance,click} from '../store/actions/salary';
 import Icon from 'react-native-vector-icons/Ionicons';
+import LottieView from 'lottie-react-native';
 
 import {useNavigation} from '@react-navigation/native'
 
@@ -18,11 +19,13 @@ const Amount = () =>{
 
     //state to take independent text input
     const[text,SetText] =useState('')
+    
 
     const textHandler = (enteredText) => {SetText(enteredText.replace(/[^0-9]/g, '')) ;setPressed(false)}
     
     // getting balance from store
     const amountPased = useSelector(state => state.balance.balance);
+    const isClickable = useSelector(state => state.balance.clickable)
 
 
     const dispatch = useDispatch();
@@ -39,6 +42,9 @@ const Amount = () =>{
     }
     const addBalanceHandler_2 = () => {
         dispatch(addBalance(percent(percentage,amountPased)))
+    }
+    const clickableHandler = () => {
+        dispatch(click())
     }
 
 
@@ -68,12 +74,15 @@ const Amount = () =>{
                       { text: "OK", onPress: () => {
                        reduceBalanceHandler();
                        addBalanceHandler();
+                       clickableHandler();
                        Alert.alert("Withdraw Successful","Amount withdrawn successfully",
                        [
                         { text: "OK", onPress: () => {
                             SetText('') ;
                              setPressed(false);
-                             navigation.navigate('History')},
+                             
+                             navigation.navigate('History');
+                             },
                               style:'destructive' }
                     ])} }
                   ]
@@ -91,11 +100,13 @@ const Amount = () =>{
                         { text: "OK", onPress: () => {
                              reduceBalanceHandler_2();
                              addBalanceHandler_2();
+                             clickableHandler();
                              Alert.alert("Withdraw Successful","Amount withdrawn successfully",
                              [
                               { text: "OK", onPress: () => {
                                   SetText('') ;
                                    setPressed(false);
+                                   
                                    navigation.navigate('History')},
                                     style:'destructive' }
                           ])} }
@@ -126,6 +137,7 @@ const Amount = () =>{
         setPercentage(1)
         setPressed(true)
     }
+    
    return(
     <View style={styles.amountContainer}>
         <View style={styles.amountHeadingContainer}>
@@ -166,8 +178,8 @@ const Amount = () =>{
             </View>
             <View style={styles.buttonContainer}>
 
-                <TouchableOpacity onPress ={twoButtonAlert}>
-                    <View style={styles.button}><Text style={styles.text}>WITHDRAW</Text></View>
+                <TouchableOpacity onPress ={()=>twoButtonAlert() } disabled={isClickable}>
+                    <View style={styles.button}><Text style={isClickable?styles.text1:styles.text}>WITHDRAW</Text></View>
                 </TouchableOpacity>
         
             </View>
@@ -226,5 +238,10 @@ const styles = StyleSheet.create({
         fontFamily:'Roboto-Bold',
         fontSize:20,
     },   
+    text1:{
+        color:"#aaa",
+        fontFamily:'Roboto-Bold',
+        fontSize:20,
+    }
 })
 export default Amount;
