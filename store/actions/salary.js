@@ -1,6 +1,7 @@
 export const REDUCE_BALANCE = 'REDUCE_BALANCE';
 export const ADD_BALANCE = 'ADD_BALANCE';
 export const PASS_BALANCE = 'PASS_BALANCE';
+export const CLICK = 'CLICK';
 
 export const reduceBalance = (amt) => {
 
@@ -12,4 +13,7 @@ export const addBalance = (amt) => {
 };
 export const passBalance = (amt) => {
     return {type:PASS_BALANCE, passedBalance : amt};
+};
+export const click = () => {
+    return {type:CLICK};
 };
