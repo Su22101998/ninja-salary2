@@ -43,7 +43,8 @@ const DashBoard = ({navigation}) => {
 
 const mysalary = data.monthly_salary_in_paisa/100
 if(isLoading){
-   return (<View style = {{flex:1,alignItems:'center',justifyContent:'center'}}>
+   return (<View style = {{flex:1,alignItems:'center',justifyContent:'center',backgroundColor:'#2e2b5a'}}>
+       <Image style={styles.headerImage} source={require('../assets/images/nsicon.png')} />
        <ActivityIndicator size="large" color="#7e5ea7" />
    </View>)
 }
